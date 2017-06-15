@@ -1,0 +1,24 @@
+{
+  "config": {
+    "groups": [],
+    "resources": [],
+    "resource_types": [],
+    "jobs": [{
+      "name": "this-is-a-job",
+      "serial": true,
+      "plan": [{
+        "task": "the-task",
+        "config": {
+          "platform": "linux",
+          "run": {
+            "path": "/bin/bash",
+            "args": ["-c", "echo \"foo\"\n"],
+            "dir": ""
+          }
+        }
+      }]
+    }]
+  },
+  "errors": null,
+  "raw_config": "{\"groups\":[],\"resources\":[],\"resource_types\":[],\"jobs\":[{\"name\":\"this-is-a-job\",\"serial\":true,\"plan\":[{\"task\":\"the-task\",\"config\":{\"platform\":\"linux\",\"run\":{\"path\":\"/bin/bash\",\"args\":[\"-c\",\"echo \\\"foo\\\"\\n\"],\"dir\":\"\"}}}]}]}"
+}
