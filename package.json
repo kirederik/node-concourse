@@ -4,7 +4,7 @@
   "description": "A Javascript client for the Concourse api",
   "main": "index.js",
   "repository": "git@github.com:kirederik/passenger.git",
-  "author": "Derik Evangelista <devangelista@pivotal.io>",
+  "author": "Derik Evangelista <hello@onion.works>",
   "license": "MIT",
   "dependencies": {
     "request": "^2.81.0"
