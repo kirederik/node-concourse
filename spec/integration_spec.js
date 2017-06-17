@@ -17,25 +17,23 @@ describe('[Integration Test]', () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
 
+  // TODO: Run proper pipeline setup prior to run the tests
   describe("get pipeline", () => {
-    it("pulls the pipeline configuration", (done) => {
+    it("pulls the pipeline configuration", async () => {
       let fly = new Passenger({
         concourseURL: concourseURL,
         username: username,
         password: password,
         teamName: teamName
       });
-      let pipeline = fly.getPipeline("sample")
+      let pipeline = await fly.getPipeline("sample")
 
-      pipeline.then((p) => {
-        expect(p).toBeDefined();
-        expect(p.config).toBeDefined();
-        expect(p.config.groups).toEqual(jasmine.any(Array));
-        expect(p.config.resources).toEqual(jasmine.any(Array));
-        expect(p.config.resource_types).toEqual(jasmine.any(Array));
-        expect(p.config.jobs).toEqual(jasmine.any(Array));
-        done();
-      });
+      expect(pipeline).toBeDefined();
+      expect(pipeline.config).toBeDefined();
+      expect(pipeline.config.groups).toEqual(jasmine.any(Array));
+      expect(pipeline.config.resources).toEqual(jasmine.any(Array));
+      expect(pipeline.config.resource_types).toEqual(jasmine.any(Array));
+      expect(pipeline.config.jobs).toEqual(jasmine.any(Array));
     });
   });
 });

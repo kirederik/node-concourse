@@ -45,14 +45,19 @@ describe('[Unit test]', () => {
   });
 
   describe('#accessToken', () => {
-    it('sets the auth token', (done) => {
-      fly.accessToken().then((t) => {
-        expect(t).toEqual('Bearer token');
-        done();
-      }, done.fail);
-    })
+    it('sets the auth token', async () => {
+      token = await fly.accessToken();
+      expect(token).toEqual('Bearer token');
+    });
 
-    it('throws when the credentials are invalid', (done) => {
+    it('caches the auth token', async () => {
+      token = await fly.accessToken();
+      expect(token).toEqual('Bearer token');
+      token = await fly.accessToken();
+      expect(token).toEqual('Bearer token');
+    });
+
+    it('throws when the credentials are invalid', async () => {
       server = nock(concourseURL)
         .get('/api/v1/teams/main/auth/token')
         .basicAuth({user: username, pass: password+'wrong'})
@@ -60,11 +65,28 @@ describe('[Unit test]', () => {
       authObject.password += 'wrong';
       fly = new Passenger(authObject)
 
-      fly.accessToken().then(done.fail, (error) => {
+      try {
+        await fly.accessToken();
+        failThrowExpected();
+      } catch (error) {
         expect(error.message).toContain('not authorized');
-        done();
-      })
-    })
+      };
+    });
+
+    it('errors when the response is not a valid json', async () => {
+      server = nock(concourseURL)
+        .get('/api/v1/teams/fake/auth/token')
+        .reply(200,'undefined');
+      authObject.teamName = "fake";
+      fly = new Passenger(authObject);
+
+      try {
+        await fly.accessToken();
+        failThrowExpected();
+      } catch (error) {
+        expect(error.message).toContain('SyntaxError: Unexpected token u in JSON at position 0');
+      };
+    });
   });
 
   describe('#getPipeline', () => {
@@ -77,11 +99,8 @@ describe('[Unit test]', () => {
         .reply(200, pipelineConfig)
     });
 
-    it('pulls the pipeline configuration', (done) => {
-      fly.getPipeline('thepipe').then((config) => {
-        expect(config).toEqual(JSON.parse(pipelineConfig));
-        done();
-      }, done.fail);
+    it('pulls the pipeline configuration', async () => {
+      expect(await fly.getPipeline('thepipe')).toEqual(JSON.parse(pipelineConfig));
     });
 
     it('throws when the pipeline name is not specified', () => {
@@ -90,3 +109,6 @@ describe('[Unit test]', () => {
   });
 });
 
+function failThrowExpected() {
+  fail("Expecting an error; nothing was raised");
+}
