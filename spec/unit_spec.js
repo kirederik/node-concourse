@@ -1,4 +1,4 @@
-var Passenger = require('../passenger');
+var FlyClient = require('../index');
 let nock = require('nock');
 const fs = require('fs');
 
@@ -23,7 +23,7 @@ describe('[Unit test]', () => {
       teamName: teamName
     };
 
-    fly = new Passenger(authObject);
+    fly = new FlyClient(authObject);
   });
 
   afterAll(() => {
@@ -34,7 +34,7 @@ describe('[Unit test]', () => {
   describe('constructor', () => {
     describe('arguments', () => {
       it('errors when the arguments are not passed', () => {
-        expect(() => { new Passenger() }).toThrow([
+        expect(() => { new FlyClient() }).toThrow([
           'concourse url not set',
           'username not set',
           'password not set',
@@ -63,7 +63,7 @@ describe('[Unit test]', () => {
         .basicAuth({user: username, pass: password+'wrong'})
         .reply(401,'not authorized');
       authObject.password += 'wrong';
-      fly = new Passenger(authObject)
+      fly = new FlyClient(authObject)
 
       try {
         await fly.accessToken();
@@ -78,7 +78,7 @@ describe('[Unit test]', () => {
         .get('/api/v1/teams/fake/auth/token')
         .reply(200,'undefined');
       authObject.teamName = "fake";
-      fly = new Passenger(authObject);
+      fly = new FlyClient(authObject);
 
       try {
         await fly.accessToken();

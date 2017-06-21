@@ -1,4 +1,4 @@
-var Passenger = require('../passenger.js')
+var FlyClient = require('../index')
 
 describe('[Integration Test]', () => {
   let client = undefined;
@@ -20,7 +20,7 @@ describe('[Integration Test]', () => {
   // TODO: Run proper pipeline setup prior to run the tests
   describe("get pipeline", () => {
     it("pulls the pipeline configuration", async () => {
-      let fly = new Passenger({
+      let fly = new FlyClient({
         concourseURL: concourseURL,
         username: username,
         password: password,

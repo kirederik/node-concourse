@@ -1,9 +1,9 @@
 {
-  "name": "passenger",
+  "name": "node-concourse",
   "version": "0.1.0",
   "description": "A Javascript client for the Concourse api",
   "main": "index.js",
-  "repository": "git@github.com:kirederik/passenger.git",
+  "repository": "git@github.com:kirederik/node-concourse.git",
   "author": "Derik Evangelista <hello@onion.works>",
   "license": "MIT",
   "dependencies": {

@@ -1,6 +1,6 @@
 let request = require('request');
 
-class Passenger {
+class FlyClient {
   constructor(args) {
     let err = this._validateInputs(args);
     if (err.length > 0) {
@@ -76,4 +76,4 @@ class Passenger {
   }
 }
 
-module.exports = Passenger;
+module.exports = FlyClient;
