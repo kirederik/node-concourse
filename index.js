@@ -6,7 +6,7 @@ class FlyClient {
     if (err.length > 0) {
       throw err;
     }
-    this.concourseURL = args.concourseURL.replace(/\/$/, "");
+    this.concourseURL = args.concourseURL.replace(new RegExp("/$"), "");
     this.username = args.username;
     this.password = args.password;
     this.teamName = args.teamName;
@@ -18,6 +18,10 @@ class FlyClient {
       throw new Error('Missing Argument: pipelineName');
     }
     return this._doAuthRequest(`api/v1/teams/${this.teamName}/pipelines/${pipelineName}/config`);
+  }
+
+  setTeam(teamName, credentials) {
+    return this._doAuthRequest(`api/v1/teams/${this.teamName}/`, {method: 'PUT', body: credentials});
   }
 
   async accessToken() {
@@ -36,15 +40,22 @@ class FlyClient {
     return this._authToken;
   }
 
-  async _doAuthRequest(path) {
+  async _doAuthRequest(path, opts = {}) {
+    console.log("pre auth")
     let accessToken = await this.accessToken();
+    console.log(accessToken)
+    let reqBody = opts.body && JSON.stringify(opts.body) || null
+
     let options = {
-      method: 'GET',
+      method: opts.method || 'GET',
       url: `${this.concourseURL}/${path}`,
       headers: {
         'Authorization': `${accessToken}`
-      }
+      },
+      body: reqBody
     };
+
+    console.log(options)
 
     return this._doRequest(options);
   }

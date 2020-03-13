@@ -107,6 +107,27 @@ describe('[Unit test]', () => {
       expect(fly.getPipeline).toThrowError(/Missing Argument: pipelineName/)
     });
   });
+
+  describe('#setTeam', () => {
+    let creds = {
+      basic: {
+        username: 'foo',
+        password: 'bar'
+      }
+    }
+
+    beforeEach(() => {
+      server = server
+        .put('/api/v1/teams/myteam')
+        .matchHeader('authorization', 'Bearer token')
+        .reply(200, '{}')
+    });
+
+    fit('creates a new team with the provided creds', async () => {
+      let response = await fly.setTeam('myteam', creds)
+      expect(response).toEqual({})
+    })
+  })
 });
 
 function failThrowExpected() {
